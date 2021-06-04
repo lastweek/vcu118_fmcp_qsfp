@@ -1,47 +1,41 @@
-    init_data[7] = {2'b01, 7'h77};
-    init_data[8] = {1'b1,  8'h01};
-    init_data[9] = {1'b1,  8'h0B};
-    init_data[10] = {2'b01, 7'h77};
-    init_data[11] = {1'b1,  8'h24};
-    init_data[12] = {1'b1,  8'hC0};
-    init_data[13] = {2'b01, 7'h77};
-    init_data[14] = {1'b1,  8'h01};
-    init_data[15] = {1'b1,  8'h0B};
-    init_data[16] = {2'b01, 7'h77};
-    init_data[17] = {1'b1,  8'h25};
-    init_data[18] = {1'b1,  8'h00};
-    init_data[19] = {2'b01, 7'h77};
-    init_data[20] = {1'b1,  8'h01};
-    init_data[21] = {1'b1,  8'h05};
-    init_data[22] = {2'b01, 7'h77};
-    init_data[23] = {1'b1,  8'h02};
-    init_data[24] = {1'b1,  8'h01};
-    init_data[25] = {2'b01, 7'h77};
-    init_data[26] = {1'b1,  8'h01};
-    init_data[27] = {1'b1,  8'h05};
-    init_data[28] = {2'b01, 7'h77};
-    init_data[29] = {1'b1,  8'h05};
-    init_data[30] = {1'b1,  8'h03};
-    init_data[31] = {2'b01, 7'h77};
-    init_data[32] = {1'b1,  8'h01};
-    init_data[33] = {1'b1,  8'h09};
-    init_data[34] = {2'b01, 7'h77};
-    init_data[35] = {1'b1,  8'h57};
-    init_data[36] = {1'b1,  8'h17};
-    init_data[37] = {2'b01, 7'h77};
-    init_data[38] = {1'b1,  8'h01};
-    init_data[39] = {1'b1,  8'h0B};
-    init_data[40] = {2'b01, 7'h77};
-    init_data[41] = {1'b1,  8'h4E};
-    init_data[42] = {1'b1,  8'h1A};
-    # End configuration preamble
-    #
-    # Delay 300 msec
-    #    Delay is worst case time for device to complete any calibration
-    #    that is running due to device state change previous to this script
-    #    being processed.
-    #
-    # Start configuration registers
+    init_data[6] = {2'b01, 7'h77};
+    init_data[7] = {1'b1,  8'h01};
+    init_data[8] = {1'b1,  8'h0B};
+    init_data[9] = {2'b01, 7'h77};
+    init_data[10] = {1'b1,  8'h24};
+    init_data[11] = {1'b1,  8'hC0};
+    init_data[12] = {2'b01, 7'h77};
+    init_data[13] = {1'b1,  8'h01};
+    init_data[14] = {1'b1,  8'h0B};
+    init_data[15] = {2'b01, 7'h77};
+    init_data[16] = {1'b1,  8'h25};
+    init_data[17] = {1'b1,  8'h00};
+    init_data[18] = {2'b01, 7'h77};
+    init_data[19] = {1'b1,  8'h01};
+    init_data[20] = {1'b1,  8'h05};
+    init_data[21] = {2'b01, 7'h77};
+    init_data[22] = {1'b1,  8'h02};
+    init_data[23] = {1'b1,  8'h01};
+    init_data[24] = {2'b01, 7'h77};
+    init_data[25] = {1'b1,  8'h01};
+    init_data[26] = {1'b1,  8'h05};
+    init_data[27] = {2'b01, 7'h77};
+    init_data[28] = {1'b1,  8'h05};
+    init_data[29] = {1'b1,  8'h03};
+    init_data[30] = {2'b01, 7'h77};
+    init_data[31] = {1'b1,  8'h01};
+    init_data[32] = {1'b1,  8'h09};
+    init_data[33] = {2'b01, 7'h77};
+    init_data[34] = {1'b1,  8'h57};
+    init_data[35] = {1'b1,  8'h17};
+    init_data[36] = {2'b01, 7'h77};
+    init_data[37] = {1'b1,  8'h01};
+    init_data[38] = {1'b1,  8'h0B};
+    init_data[39] = {2'b01, 7'h77};
+    init_data[40] = {1'b1,  8'h4E};
+    init_data[41] = {1'b1,  8'h1A};
+/*    # Delay 300 msec    */
+    init_data[42] = 9'b111111111;
     init_data[43] = {2'b01, 7'h77};
     init_data[44] = {1'b1,  8'h01};
     init_data[45] = {1'b1,  8'h00};
