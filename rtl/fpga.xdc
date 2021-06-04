@@ -173,7 +173,15 @@ set_property -dict {LOC AM24 IOSTANDARD LVCMOS18 SLEW SLOW DRIVE 8} [get_ports i
 set_property -dict {LOC AL24 IOSTANDARD LVCMOS18 SLEW SLOW DRIVE 8} [get_ports i2c_sda]
 set_property -dict {LOC AL25 IOSTANDARD LVCMOS18 SLEW SLOW DRIVE 8} [get_ports i2c_mux_reset]
 
+
+####################################
+#
+#
 # FMC+
+#
+#
+####################################
+
 
 #
 # QSFP3
@@ -424,3 +432,7 @@ set_property -dict {LOC AT39 IOSTANDARD LVCMOS18} [get_ports qsfp8_intl]
 
 # QSFP6_LPMode_F H10 LA04_P AR37
 set_property -dict {LOC AR37 IOSTANDARD LVCMOS18} [get_ports qsfp8_lpmode]
+
+# LOL=loss of lock
+# CLK_LOL_N_F G19 LA16_N AH35
+set_property -dict {LOC AH35 IOSTANDARD LVCMOS18} [get_ports clk_lol]

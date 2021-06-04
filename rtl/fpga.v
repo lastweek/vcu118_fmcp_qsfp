@@ -93,6 +93,8 @@ module fpga (
     input  wire         qsfp2_intl,
     output wire         qsfp2_lpmode,
 
+    input wire          clk_lol,
+
     /*
      * FMC+: QSFP28
      * QSFP3
@@ -314,6 +316,15 @@ sync_reset_125mhz_inst (
     .clk(clk_125mhz),
     .rst(~clk_locked),
     .out(clk_125mhz_rst)
+);
+
+sync_reset #(
+    .N(4)
+)
+sync_reset_125mhz_qsfp_inst (
+    .clk(clk_125mhz),
+    .rst(clk_125mhz_rst | ~clk_lol),
+    .out(clk_125mhz_rst_qsfp)
 );
 
 sync_reset #(
@@ -1437,7 +1448,7 @@ qsfp3_cmac_inst (
     .gt_ref_clk_n(qsfp3_mgt_refclk_0_n), // input
 
     .init_clk(clk_125mhz), // input
-    .sys_reset(clk_125mhz_rst), // input
+    .sys_reset(clk_125mhz_rst_qsfp), // input
 
     .rx_axis_tvalid(qsfp3_rx_axis_tvalid_int), // output
     .rx_axis_tdata(qsfp3_rx_axis_tdata_int), // output [511:0]
@@ -1726,7 +1737,7 @@ qsfp4_cmac_inst (
     .gt_ref_clk_n(qsfp4_mgt_refclk_0_n), // input
 
     .init_clk(clk_125mhz), // input
-    .sys_reset(clk_125mhz_rst), // input
+    .sys_reset(clk_125mhz_rst_qsfp), // input
 
     .rx_axis_tvalid(qsfp4_rx_axis_tvalid_int), // output
     .rx_axis_tdata(qsfp4_rx_axis_tdata_int), // output [511:0]
@@ -2016,7 +2027,7 @@ qsfp5_cmac_inst (
     .gt_ref_clk_n(qsfp5_mgt_refclk_0_n), // input
 
     .init_clk(clk_125mhz), // input
-    .sys_reset(clk_125mhz_rst), // input
+    .sys_reset(clk_125mhz_rst_qsfp), // input
 
     .rx_axis_tvalid(qsfp5_rx_axis_tvalid_int), // output
     .rx_axis_tdata(qsfp5_rx_axis_tdata_int), // output [511:0]
@@ -2306,7 +2317,7 @@ qsfp6_cmac_inst (
     .gt_ref_clk_n(qsfp6_mgt_refclk_0_n), // input
 
     .init_clk(clk_125mhz), // input
-    .sys_reset(clk_125mhz_rst), // input
+    .sys_reset(clk_125mhz_rst_qsfp), // input
 
     .rx_axis_tvalid(qsfp6_rx_axis_tvalid_int), // output
     .rx_axis_tdata(qsfp6_rx_axis_tdata_int), // output [511:0]
@@ -2595,7 +2606,7 @@ qsfp7_cmac_inst (
     .gt_ref_clk_n(qsfp7_mgt_refclk_0_n), // input
 
     .init_clk(clk_125mhz), // input
-    .sys_reset(clk_125mhz_rst), // input
+    .sys_reset(clk_125mhz_rst_qsfp), // input
 
     .rx_axis_tvalid(qsfp7_rx_axis_tvalid_int), // output
     .rx_axis_tdata(qsfp7_rx_axis_tdata_int), // output [511:0]
@@ -2884,7 +2895,7 @@ qsfp8_cmac_inst (
     .gt_ref_clk_n(qsfp8_mgt_refclk_0_n), // input
 
     .init_clk(clk_125mhz), // input
-    .sys_reset(clk_125mhz_rst), // input
+    .sys_reset(clk_125mhz_rst_qsfp), // input
 
     .rx_axis_tvalid(qsfp8_rx_axis_tvalid_int), // output
     .rx_axis_tdata(qsfp8_rx_axis_tdata_int), // output [511:0]
@@ -3228,6 +3239,7 @@ supernic_core2 core_inst2 (
     .clk_250mhz(clk_250mhz),
     .rst_250mhz(clk_250mhz_rst),
 
+    .clk_125mhz_rst_qsfp(clk_125mhz_rst_qsfp),
     .vector_signals(),
 
     /*
