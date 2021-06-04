@@ -3240,6 +3240,8 @@ supernic_core2 core_inst2 (
     .rst_250mhz(clk_250mhz_rst),
 
     .clk_125mhz_rst_qsfp(clk_125mhz_rst_qsfp),
+    .clk_125mhz_rst(clk_125mhz_rst),
+    .clk_lol(clk_lol),
     .vector_signals(),
 
     /*
