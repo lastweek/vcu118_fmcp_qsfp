@@ -2558,19 +2558,7 @@ always @* begin
             end
             STATE_RUN: begin
                 // process commands
-                if (init_data_reg[8] == 1'b1) begin
-                    // write data
-                    cmd_write_next = 1'b1;
-                    cmd_stop_next = 1'b0;
-                    cmd_valid_next = 1'b1;
-
-                    data_out_next = init_data_reg[7:0];
-                    data_out_valid_next = 1'b1;
-
-                    address_next = address_reg + 1;
-
-                    state_next = STATE_RUN;
-                end else if (init_data_reg == 9'b111111111) begin
+                if (init_data_reg == 9'b111111111) begin
                     //
                     // Delay 300 ms
                     // clk_125mhz
@@ -2583,6 +2571,18 @@ always @* begin
                     end else begin
                         address_next = address_reg + 1;
                     end
+                    state_next = STATE_RUN;
+                end else if (init_data_reg[8] == 1'b1) begin
+                    // write data
+                    cmd_write_next = 1'b1;
+                    cmd_stop_next = 1'b0;
+                    cmd_valid_next = 1'b1;
+
+                    data_out_next = init_data_reg[7:0];
+                    data_out_valid_next = 1'b1;
+
+                    address_next = address_reg + 1;
+
                     state_next = STATE_RUN;
                 end else if (init_data_reg[8:7] == 2'b01) begin
                     // write address
