@@ -134,7 +134,7 @@ write 0x11223344 to register 0x0004 on devices at 0x50, 0x51, 0x52, and 0x53
 */
 
 // init_data ROM
-localparam INIT_DATA_LEN = 2329;
+localparam INIT_DATA_LEN = 2330;
 
 reg [8:0] init_data [INIT_DATA_LEN-1:0];
 
@@ -142,10 +142,10 @@ initial begin
     // Select Mux
     init_data[0] = {2'b01, 7'h74};
     init_data[1] = {1'b1,  8'h00};
-    init_data[2] = 9'd0;                // Stop
+    init_data[2] = 9'b001000001;                // Stop
     init_data[3] = {2'b01, 7'h75};
     init_data[4] = {1'b1,  8'h02};
-    init_data[5] = 9'd0;                // Stop
+    init_data[5] = 9'b001000001;                // Stop
 
     // Commands From ClockBuildPro
     init_data[6] = {2'b01, 7'h77};
@@ -184,8 +184,10 @@ initial begin
     init_data[39] = {2'b01, 7'h77};
     init_data[40] = {1'b1,  8'h4E};
     init_data[41] = {1'b1,  8'h1A};
+    
 /*    # Delay 300 msec    */
     init_data[42] = 9'b001111111;
+    
     init_data[43] = {2'b01, 7'h77};
     init_data[44] = {1'b1,  8'h01};
     init_data[45] = {1'b1,  8'h00};
@@ -2472,6 +2474,7 @@ initial begin
     init_data[2326] = {2'b01, 7'h77};
     init_data[2327] = {1'b1,  8'h25};
     init_data[2328] = {1'b1,  8'h02};
+    init_data[2329] = 9'd0;
 end
 
 localparam [3:0]
@@ -2479,7 +2482,8 @@ localparam [3:0]
     STATE_RUN = 3'd1,
     STATE_TABLE_1 = 3'd2,
     STATE_TABLE_2 = 3'd3,
-    STATE_TABLE_3 = 3'd4;
+    STATE_TABLE_3 = 3'd4,
+    STATE_DELAY   = 3'd5;
 
 reg [4:0] state_reg = STATE_IDLE, state_next;
 
@@ -2487,7 +2491,7 @@ parameter AW = $clog2(INIT_DATA_LEN);
 
 reg [8:0] init_data_reg = 9'd0;
 
-reg [31:0] delay_counter = 32'd0;
+reg [31:0] delay_counter = 32'd0, delay_counter_next;
 assign out_delay_counter = delay_counter;
 
 reg [AW-1:0] address_reg = {AW{1'b0}}, address_next;
@@ -2558,9 +2562,7 @@ always @* begin
                     state_next = STATE_IDLE;
                 end
             end
-            STATE_RUN: begin
-                // process commands
-                if (init_data_reg == 9'b001111111) begin
+            STATE_DELAY: begin
                     //
                     // Delay 300 ms
                     // clk_125mhz
@@ -2569,11 +2571,17 @@ always @* begin
                     // 26 bit = 1 (or 27 bit??)
                     //
                     if (delay_counter < 32'd37500000) begin
-                        delay_counter <= delay_counter + 32'd1;
+                        delay_counter_next <= delay_counter + 32'd1;
+                        state_next = STATE_DELAY;
                     end else begin
                         address_next = address_reg + 1;
+                        state_next = STATE_RUN;
                     end
-                    state_next = STATE_RUN;
+            end
+            STATE_RUN: begin
+                // process commands
+                if (init_data_reg == 9'b001111111) begin
+                    state_next = STATE_DELAY;
                 end else if (init_data_reg[8] == 1'b1) begin
                     // write data
                     cmd_write_next = 1'b1;
@@ -2775,6 +2783,9 @@ always @(posedge clk) begin
         start_flag_reg <= 1'b0;
 
         busy_reg <= 1'b0;
+
+        delay_counter <= 32'b0;
+        delay_counter_next <= 32'b0;
     end else begin
         state_reg <= state_next;
 
@@ -2794,6 +2805,8 @@ always @(posedge clk) begin
         start_flag_reg <= start & start_flag_next;
 
         busy_reg <= (state_reg != STATE_IDLE);
+
+        delay_counter <= delay_counter_next;
     end
 
     cmd_address_reg <= cmd_address_next;
