@@ -393,6 +393,8 @@ always @(posedge clk_125mhz) begin
     end
 end
 
+wire [31:0] delay_counter;
+
 si5341_i2c_init
 si5341_i2c_init_inst (
     .clk(clk_125mhz),
@@ -410,7 +412,8 @@ si5341_i2c_init_inst (
     .data_out_ready(si5341_i2c_data_ready),
     .data_out_last(si5341_i2c_data_last),
     .busy(si5341_i2c_init_busy),
-    .start(si5341_i2c_init_start_delay[20])
+    .start(si5341_i2c_init_start_delay[20]),
+    .out_delay_counter(delay_counter)
 );
 
 i2c_master
@@ -3242,6 +3245,7 @@ supernic_core2 core_inst2 (
     .clk_125mhz_rst_qsfp(clk_125mhz_rst_qsfp),
     .clk_125mhz_rst(clk_125mhz_rst),
     .clk_lol(clk_lol),
+    .delay_counter(delay_counter),
     .vector_signals(),
 
     /*

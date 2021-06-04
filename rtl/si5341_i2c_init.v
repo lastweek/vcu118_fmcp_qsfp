@@ -58,7 +58,8 @@ module si5341_i2c_init (
     /*
      * Configuration
      */
-    input  wire        start
+    input  wire        start,
+    output wire        out_delay_counter
 );
 
 /*
@@ -184,7 +185,7 @@ initial begin
     init_data[40] = {1'b1,  8'h4E};
     init_data[41] = {1'b1,  8'h1A};
 /*    # Delay 300 msec    */
-    init_data[42] = 9'b111111111;
+    init_data[42] = 9'b001111111;
     init_data[43] = {2'b01, 7'h77};
     init_data[44] = {1'b1,  8'h01};
     init_data[45] = {1'b1,  8'h00};
@@ -2487,6 +2488,7 @@ parameter AW = $clog2(INIT_DATA_LEN);
 reg [8:0] init_data_reg = 9'd0;
 
 reg [31:0] delay_counter = 32'd0;
+assign out_delay_counter = delay_counter;
 
 reg [AW-1:0] address_reg = {AW{1'b0}}, address_next;
 reg [AW-1:0] address_ptr_reg = {AW{1'b0}}, address_ptr_next;
@@ -2558,7 +2560,7 @@ always @* begin
             end
             STATE_RUN: begin
                 // process commands
-                if (init_data_reg == 9'b111111111) begin
+                if (init_data_reg == 9'b001111111) begin
                     //
                     // Delay 300 ms
                     // clk_125mhz
@@ -2566,7 +2568,7 @@ always @* begin
                     // == 0x23c3460 cycles
                     // 26 bit = 1 (or 27 bit??)
                     //
-                    if (!delay_counter[26]) begin
+                    if (delay_counter < 32'd37500000) begin
                         delay_counter <= delay_counter + 32'd1;
                     end else begin
                         address_next = address_reg + 1;
