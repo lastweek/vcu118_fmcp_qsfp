@@ -60,7 +60,8 @@ module si5341_i2c_init (
      */
     input  wire        start,
     output wire [31:0] out_delay_counter,
-    output wire [31:0] out_address_reg
+    output wire [31:0] out_address_reg,
+    output wire [31:0] out_state_reg
 );
 
 /*
@@ -2501,6 +2502,7 @@ reg [AW-1:0] data_ptr_reg = {AW{1'b0}}, data_ptr_next;
 
 assign out_delay_counter = delay_counter;
 assign out_address_reg = address_reg;
+assign out_state_reg = state_reg;
 
 reg [6:0] cur_address_reg = 7'd0, cur_address_next;
 
@@ -2575,7 +2577,7 @@ always @* begin
                     // 26 bit = 1 (or 27 bit??)
                     //
                     if (delay_counter < 32'd37500000) begin
-                        delay_counter_next <= delay_counter + 32'd1;
+                        delay_counter_next = delay_counter + 32'd1;
                         state_next = STATE_DELAY;
                     end else begin
                         state_next = STATE_RUN;

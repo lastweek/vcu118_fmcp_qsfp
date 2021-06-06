@@ -395,6 +395,7 @@ end
 
 wire [31:0] delay_counter;
 wire [31:0] address_reg;
+wire [31:0] state_reg;
 
 si5341_i2c_init
 si5341_i2c_init_inst (
@@ -415,7 +416,8 @@ si5341_i2c_init_inst (
     .busy(si5341_i2c_init_busy),
     .start(si5341_i2c_init_start_delay[20]),
     .out_delay_counter(delay_counter),
-    .out_address_reg(address_reg)
+    .out_address_reg(address_reg),
+    .out_state_reg(state_reg)
 );
 
 i2c_master
@@ -3250,6 +3252,7 @@ supernic_core2 core_inst2 (
     .delay_counter(delay_counter),
     .address_reg(address_reg),
     .t1(si5341_i2c_init_start_delay[20]),
+    .state_reg(state_reg),
     .vector_signals(),
 
     /*
