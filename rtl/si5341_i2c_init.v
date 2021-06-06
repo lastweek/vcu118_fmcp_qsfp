@@ -2493,14 +2493,15 @@ parameter AW = $clog2(INIT_DATA_LEN);
 
 reg [8:0] init_data_reg = 9'd0;
 
-reg [31:0] delay_counter = 32'd0, delay_counter_next;
+reg [31:0] delay_counter = 32'd0;
+reg [31:0] delay_counter_next = 32'd0;
 
 
 reg [AW-1:0] address_reg = {AW{1'b0}}, address_next;
 reg [AW-1:0] address_ptr_reg = {AW{1'b0}}, address_ptr_next;
 reg [AW-1:0] data_ptr_reg = {AW{1'b0}}, data_ptr_next;
 
-assign out_delay_counter = delay_counter;
+assign out_delay_counter = delay_counter_next;
 assign out_address_reg = address_reg;
 assign out_state_reg = state_reg;
 
@@ -2536,6 +2537,7 @@ assign busy = busy_reg;
 always @* begin
     state_next = STATE_IDLE;
 
+    //delay_counter_next = delay_counter;
     address_next = address_reg;
     address_ptr_next = address_ptr_reg;
     data_ptr_next = data_ptr_reg;
@@ -2576,8 +2578,9 @@ always @* begin
                     // == 0x23c3460 cycles
                     // 26 bit = 1 (or 27 bit??)
                     //
-                    if (delay_counter < 32'd37500000) begin
-                        delay_counter_next = delay_counter + 32'd1;
+                    //if (delay_counter < 32'd37500000) begin
+                    if (!delay_counter[26]) begin
+                        delay_counter_next = delay_counter + 1;
                         state_next = STATE_DELAY;
                     end else begin
                         state_next = STATE_RUN;
@@ -2586,8 +2589,8 @@ always @* begin
             STATE_RUN: begin
                 // process commands
                 if (init_data_reg == 9'b001111111) begin
-                    state_next = STATE_DELAY;
                     address_next = address_reg + 1;
+                    state_next = STATE_DELAY;
                 end else if (init_data_reg[8] == 1'b1) begin
                     // write data
                     cmd_write_next = 1'b1;
@@ -2798,6 +2801,7 @@ always @(posedge clk) begin
         // read init_data ROM
         init_data_reg <= init_data[address_next];
 
+        delay_counter <= delay_counter_next;
         address_reg <= address_next;
         address_ptr_reg <= address_ptr_next;
         data_ptr_reg <= data_ptr_next;
@@ -2811,8 +2815,6 @@ always @(posedge clk) begin
         start_flag_reg <= start & start_flag_next;
 
         busy_reg <= (state_reg != STATE_IDLE);
-
-        delay_counter <= delay_counter_next;
     end
 
     cmd_address_reg <= cmd_address_next;

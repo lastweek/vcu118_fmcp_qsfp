@@ -3251,9 +3251,11 @@ supernic_core2 core_inst2 (
     .clk_lol(clk_lol),
     .delay_counter(delay_counter),
     .address_reg(address_reg),
-    .t1(si5341_i2c_init_start_delay[20]),
     .state_reg(state_reg),
+    .t1(si5341_i2c_init_start_delay[20]),
     .vector_signals(),
+    .t2(si5341_i2c_data_valid),
+    .t3(si5341_i2c_cmd_valid),
 
     /*
      * Ethernet: QSFP28
